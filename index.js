@@ -1,3 +1,10 @@
+// import 'reflect-metadata';
+// import { AppDataSource } from './config/data-source';
+
+// AppDataSource.initialize()
+//   .then(() => console.log('Banco conectado com sucesso!'))
+//   .catch((err) => console.error('Erro ao conectar no banco:', err));
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
