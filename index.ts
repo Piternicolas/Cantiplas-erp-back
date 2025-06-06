@@ -1,6 +1,9 @@
 // src/index.ts
 import 'reflect-metadata';
 import * as dotenv from 'dotenv';
+import clienteRoutes from './src/routes/clienteRoutes';
+import osRoutes from './src/routes/osRoutes';
+
 dotenv.config();
 
 import express from 'express';
@@ -13,6 +16,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+
+// Importando as rotas de ordens de serviço e clientes
+app.use('/api', clienteRoutes);
+app.use('/api', osRoutes);
 
 const PORT = process.env.PORT || 3000;
 
