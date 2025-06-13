@@ -22,7 +22,7 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = jwt.sign({ id: user.id, nome: user.nome }, 'secreta', { expiresIn: '5m' });
+    const token = jwt.sign({ id: user.id, nome: user.nome }, 'secreta', { expiresIn: '60m' });
 
     res.json({ token, user: { id: user.id, nome: user.nome, user_login: user.user_login } });
   } catch (error) {
