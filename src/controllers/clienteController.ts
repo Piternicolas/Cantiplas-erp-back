@@ -14,4 +14,34 @@ export const listarClientes = async (req: Request, res: Response) => {
   }
 };
  
- 
+export const criarCliente = async (req: Request, res: Response) => {
+  const {
+    nome,
+    razaosocial,
+    email,
+    telefone,
+    endereco,
+    cidade,
+    estado,
+    cep
+  } = req.body;
+
+  try {
+    const novoCliente = clienteRepo.create({
+      nome,
+      razaosocial,
+      email,
+      telefone,
+      endereco,
+      cidade,
+      estado,
+      cep
+    });
+
+    const salvarCliente = await clienteRepo.save(novoCliente);
+    res.status(201).json(salvarCliente);
+  } catch (error) {
+    console.error('Erro ao criar cliente:', error);
+    res.status(500).json({ error: 'Erro ao criar Cliente' });
+  }
+}
