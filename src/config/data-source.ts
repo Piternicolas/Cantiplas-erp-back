@@ -1,6 +1,4 @@
 import { DataSource } from "typeorm";
-import { OrdemServico } from "../entity/OrdemServico";
-import { Cliente } from "../entity/Cliente";
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,6 +9,6 @@ export const AppDataSource = new DataSource({
   database: 'zero_DB',
   synchronize: false,
   logging: true,
-  entities: [OrdemServico, Cliente],
+  entities: [__dirname + '/../entity/*.ts'],
   migrations: ['src/migrations/**/*.ts'],
 });
