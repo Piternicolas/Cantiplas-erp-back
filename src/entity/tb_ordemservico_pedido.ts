@@ -50,6 +50,7 @@ export class OrdemServicoPedido {
     
     @OneToOne(() => Corte, corte => corte.pedido,
     {cascade: true, eager: true})
+    corte!: Corte;
 
     @Column({ type: 'varchar', length: 20, unique: true })
     numero_os!: string;
@@ -113,15 +114,11 @@ export class OrdemServicoPedido {
     @Column({type: 'varchar', length: 10})
     sanfona_corte!: string;
 
-    setSanfonaCorte(valor: number) {
-        this.sanfona_corte = `${valor}cm`;
-    }
-
     @Column({ type: 'enum', enum: TipoCorte, default: TipoCorte.LATERAL })
     tipo_corte!: TipoCorte;
 
     @Column({ type: 'decimal', precision: 5, scale: 1, default: 0 })
-    Embalar_com!: number;
+    embalar_com!: number;
 
     @Column({ type: 'varchar', length: 50, default: 'N/A', nullable: true })
     tipo_furo!: string;

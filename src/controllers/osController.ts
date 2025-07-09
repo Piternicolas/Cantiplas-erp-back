@@ -1,46 +1,48 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../config/data-source';
-import { OrdemServico } from '../entity/OrdemServico';
-import { Cliente } from '../entity/Cliente';
+import { OrdemServicoPedido } from '../entity/tb_ordemservico_pedido';
 
-const osRepo = AppDataSource.getRepository(OrdemServico);
-const clienteRepository = AppDataSource.getRepository(Cliente);
+const osRepo = AppDataSource.getRepository(OrdemServicoPedido);
 
-export const criarOS = async (req: Request, res: Response): Promise<void> => {
-  const {
-    cliente_id,
-    data_pedido,
-    criado_por,
-    representante,
-    situacao,
-    qnt_pedido,
-    colorido,
-    estampado,
-  } = req.body;
-
+// Criar nova ordem de serviço
+export const criarOS = async (req: Request, res: Response) => {
   try {
-    const cliente = await clienteRepository.findOneBy({ cliente_id });
+    const novaOS = osRepo.create(req.body);
+    const resultado = await osRepo.save(novaOS);
+    res.status(201).json(resultado);
+  } catch (error) {
+    console.error('Erro ao criar ordem de serviço:', error);
+    res.status(500).json({ erro: 'Erro ao criar ordem de serviço' });
+  }
+};
 
-    if (!cliente) {
-      res.status(404).json({ error: 'Cliente não encontrado' });
-      return;
+// Listar todas as ordens ou pesquisar por numero_os
+export const listarOS = async (req: Request, res: Response) => {
+  try {
+    const { numero_os } = req.query;
+
+    if (numero_os) {
+      const ordem = await osRepo.findOne({
+        where: { numero_os: String(numero_os) },
+        relations: ['cliente', 'representante', 'extrusao', 'impressao', 'corte']
+      });
+
+      if (!ordem) {
+        return res.status(404).json({ erro: 'Ordem de serviço não encontrada pelo numero_os' });
+      }
+
+      return res.json(ordem);
     }
 
-    const novaOS = osRepo.create({
-      cliente,
-      data_pedido,
-      criado_por,
-      representante,
-      situacao,
-      qnt_pedido,
-      colorido,
-      estampado,
+    // Se não houver filtro, retorna todas
+    const ordens = await osRepo.find({
+      relations: ['cliente', 'representante', 'extrusao', 'impressao', 'corte'],
+      order: { pedido_id: 'DESC' }
     });
 
-    const salvaOS = await osRepo.save(novaOS);
-    res.status(201).json(salvaOS);
+    return res.json(ordens);
   } catch (error) {
-    console.error('Erro ao criar Ordem de Serviço:', error);
-    res.status(500).json({ error: 'Erro ao criar Ordem de Serviço' });
+    console.error('Erro ao buscar ordens de serviço:', error);
+    return res.status(500).json({ erro: 'Erro ao buscar ordens de serviço' });
   }
 };

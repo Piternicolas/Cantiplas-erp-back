@@ -83,6 +83,6 @@ export class Representantes {
         @CreateDateColumn({ type: 'timestamp' })
         data_cadastro!: Date;
     
-        @OneToMany(() => OrdemServicoPedido, os => os.cliente)
+        @OneToMany(() => OrdemServicoPedido, os => os.representante)
         ordens!: OrdemServicoPedido[];
 }
