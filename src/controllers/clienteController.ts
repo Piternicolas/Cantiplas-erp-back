@@ -1,47 +1,30 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../config/data-source';
-import { Cliente } from '../entity/Cliente';
+import { Clientes } from '../entity/tb_clientes';
 
-const clienteRepo = AppDataSource.getRepository(Cliente);
+const clienteRepo = AppDataSource.getRepository(Clientes);
 
+// listar todos os clientes
 export const listarClientes = async (req: Request, res: Response) => {
   try {
     const clientes = await clienteRepo.find()
     res.json(clientes);
   } catch (error) {
     console.error('Erro ao buscar clientes:', error);
-    res.status(500).json({ erro: 'Erro ao buscar clientes' });
+    return res.status(500).json({ erro: 'Erro ao buscar clientes' });
   }
 };
- 
-export const criarCliente = async (req: Request, res: Response) => {
-  const {
-    nome,
-    razaosocial,
-    email,
-    telefone,
-    endereco,
-    cidade,
-    estado,
-    cep
-  } = req.body;
 
+// criar um novo cliente
+export const criarCliente = async (req: Request, res: Response) => {
   try {
-    const novoCliente = clienteRepo.create({
-      nome,
-      razaosocial,
-      email,
-      telefone,
-      endereco,
-      cidade,
-      estado,
-      cep
-    });
+    const novoCliente = clienteRepo.create(req.body);
 
     const salvarCliente = await clienteRepo.save(novoCliente);
-    res.status(201).json(salvarCliente);
+    
+    return res.status(201).json(salvarCliente);
   } catch (error) {
     console.error('Erro ao criar cliente:', error);
-    res.status(500).json({ error: 'Erro ao criar Cliente' });
+    return res.status(500).json({ error: 'Erro ao criar Cliente' });
   }
 }

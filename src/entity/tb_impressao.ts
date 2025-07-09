@@ -6,6 +6,11 @@ export enum TipoCyrel {
     VELHO = 'velho'
 }
 
+export enum MaquinaImpressao {
+    QUATRO_CORES = 'quatro_cores',
+    SEIS_CORES = 'seis_cores',
+}
+
 @Entity('tb_impressao')
 export class Impressao {
     @PrimaryGeneratedColumn()
@@ -17,6 +22,9 @@ export class Impressao {
 
     @Column({type: 'varchar', length: 255, nullable: true})
     descricao_imp!: string;
+
+    @Column({type: 'enum', enum: MaquinaImpressao})
+    maquina_imp!: MaquinaImpressao;
 
     @Column({type: 'decimal', precision: 5, scale: 1, default: 0})
     kg_impresso!: number;

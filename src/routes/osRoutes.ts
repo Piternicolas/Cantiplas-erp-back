@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { criarOS } from '../controllers/osController';
+import { criarOS, listarOS } from '../controllers/osController';
 
 const router = Router();
 
-// rota post para criar uma nova Ordem de Serviço
+// POST: Criar nova ordem de serviço
 router.post('/ordens', criarOS);
 
+// GET: Listar todas ou buscar por numero_os
+router.get('/ordens', listarOS);
+
 export default router;
-  

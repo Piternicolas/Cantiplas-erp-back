@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column,JoinColumn, BeforeInsert, OneToOne } from "typeorm";
+import { Entity, Column,JoinColumn, BeforeInsert, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrdemServicoPedido } from "./tb_ordemservico_pedido";
 
 export enum TipoTratamento {
@@ -7,10 +7,17 @@ export enum TipoTratamento {
     DUPLO = 'duplo'
 }
 
+export enum MaquinaExtrusao {
+    CARNEVALLI = 'carnevalli',
+    CIOLA = 'ciola',
+    RULLI = 'rulli',
+    OUTRA = 'outra'
+}
+
 @Entity('tb_extrusao')
 export class Extrusao {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     extrusao_id!: number;
 
     @OneToOne(() => OrdemServicoPedido)
@@ -19,6 +26,9 @@ export class Extrusao {
 
     @Column({type: 'varchar', length: 255, nullable: true})
     descricao_ext!: string;
+
+    @Column({type: 'enum', enum: MaquinaExtrusao})
+    maquina_ext!: MaquinaExtrusao;
 
     @Column({type: 'decimal', precision: 5, scale: 1, default: 0})
     kg_extrusado!: number;
