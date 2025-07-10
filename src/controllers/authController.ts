@@ -11,7 +11,6 @@ export const login = async (req: Request, res: Response) => {
 
     if (result.rows.length === 0) {
       return res.status(401).json({ erro: 'Usuário não encontrado' });
-      return;
     }
 
     const user = result.rows[0];
@@ -19,12 +18,11 @@ export const login = async (req: Request, res: Response) => {
 
     if (!senhaValida) {
       return res.status(401).json({ erro: 'Senha incorreta' });
-      return;
     }
 
-    const token = jwt.sign({ id: user.id, nome: user.nome }, 'secreta', { expiresIn: '60m' });
+    const token = jwt.sign({ id: user.id, nome: user.nome }, process.env.JWT_SECRET as string, { expiresIn: '60m' });
 
-    return res.json({ token, user: { id: user.id, nome: user.nome, user_login: user.user_login } });
+    return res.json({ token, user});
   } catch (error) {
     console.error('Erro no login:', error);
     return res.status(500).json({ erro: 'Erro interno do servidor' });
