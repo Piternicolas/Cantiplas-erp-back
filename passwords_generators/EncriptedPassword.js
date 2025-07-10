@@ -10,6 +10,5 @@ bcrypt.hash(senha, 10, (err, hash) => {
     return;
   }
 
-  console.log('Hash gerado para a senha:', senha);
-  console.log(hash);
+  console.log('Hash gerado para a senha:', hash)
 });
